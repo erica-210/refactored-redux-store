@@ -1,5 +1,6 @@
 const { User, Product, Category, Order } = require('../models');
-const { signToken, AuthenticationError } = require('../utils/auth');
+const { signToken} = require('../utils/auth');
+const { AuthenticationError } = require('apollo-server-express');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 const resolvers = {
@@ -56,7 +57,7 @@ const resolvers = {
       const order = new Order({ products: args.products });
       const line_items = [];
 
-      const { products } = await order.populate('products');
+      const { products } = await order.populate('products').execPopulate();;
 
       for (let i = 0; i < products.length; i++) {
         const product = await stripe.products.create({
