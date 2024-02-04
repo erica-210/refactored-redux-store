@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
+import React from "react";
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/react-hooks';
 import { QUERY_USER } from '../utils/queries';
 
 function OrderHistory() {
