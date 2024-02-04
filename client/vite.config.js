@@ -1,8 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path';
-
-// https://vitejs.dev/config/
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
@@ -11,19 +8,19 @@ export default defineConfig({
     open: true,
     proxy: {
       '/graphql': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3000',
         secure: false,
-        changeOrigin: true
-      }
-    }
+        changeOrigin: true,
+      },
+    },
   },
   resolve: {
     alias: {
-      '@redux': resolve(__dirname, 'src/redux') // Adjust the path to your Redux directory
-    }
+      '@redux': '/path/to/your/redux', // Adjust the path to your Redux directory
+    },
   },
-  test: {
-    globals: true,
-    environment: 'happy-dom'
-  }
-})
+  esbuild: {
+    jsxFactory: 'React.createElement',
+    jsxInject: `import React from 'react';`,
+  },
+});

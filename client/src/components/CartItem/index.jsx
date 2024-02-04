@@ -1,62 +1,48 @@
-import { useStoreContext } from "../../utils/GlobalState";
-import { REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from "../../utils/actions";
-import { idbPromise } from "../../utils/helpers";
+import React from 'react';
+import { useDispatch } from 'react-redux'; // Import useDispatch hook from Redux
+import { removeFromCart, updateCartQuantity } from '../../redux/actions'; // Import Redux actions
+import { idbPromise } from '../../utils/helpers';
 
 const CartItem = ({ item }) => {
+  const dispatch = useDispatch(); // Redux useDispatch hook
 
-  const [, dispatch] = useStoreContext();
-
-  const removeFromCart = item => {
-    dispatch({
-      type: REMOVE_FROM_CART,
-      _id: item._id
-    });
+  const removeFromCartHandler = (item) => {
+    dispatch(removeFromCart(item._id)); // Dispatch action to remove item from cart
     idbPromise('cart', 'delete', { ...item });
-
   };
 
-  const onChange = (e) => {
+  const onChangeHandler = (e) => {
     const value = e.target.value;
     if (value === '0') {
-      dispatch({
-        type: REMOVE_FROM_CART,
-        _id: item._id
-      });
+      dispatch(removeFromCart(item._id)); // Dispatch action to remove item from cart
       idbPromise('cart', 'delete', { ...item });
-
     } else {
-      dispatch({
-        type: UPDATE_CART_QUANTITY,
-        _id: item._id,
-        purchaseQuantity: parseInt(value)
-      });
+      dispatch(updateCartQuantity(item._id, parseInt(value))); // Dispatch action to update cart quantity
       idbPromise('cart', 'put', { ...item, purchaseQuantity: parseInt(value) });
-
     }
-  }
+  };
 
   return (
     <div className="flex-row">
       <div>
-        <img
-          src={`/images/${item.image}`}
-          alt=""
-        />
+        <img src={`/images/${item.image}`} alt="" />
       </div>
       <div>
-        <div>{item.name}, ${item.price}</div>
+        <div>
+          {item.name}, ${item.price}
+        </div>
         <div>
           <span>Qty:</span>
           <input
             type="number"
             placeholder="1"
             value={item.purchaseQuantity}
-            onChange={onChange}
+            onChange={onChangeHandler}
           />
           <span
             role="img"
             aria-label="trash"
-            onClick={() => removeFromCart(item)}
+            onClick={() => removeFromCartHandler(item)}
           >
             🗑️
           </span>
@@ -64,6 +50,6 @@ const CartItem = ({ item }) => {
       </div>
     </div>
   );
-}
+};
 
 export default CartItem;

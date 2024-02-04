@@ -5,10 +5,6 @@ const { User, Product, Category } = require('../models');
 db.once('open', async () => {
   await Category.deleteMany();
 
-  await cleanDB('Category', 'categories');
-  await cleanDB('Product', 'products');
-  await cleanDB('User', 'users');
-
   const categories = await Category.insertMany([
     { name: 'Food' },
     { name: 'Household Supplies' },

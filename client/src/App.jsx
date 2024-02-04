@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { ApolloProvider } from "@apollo/react-hooks";
-import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "@apollo/client";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 import Home from "./pages/Home";
 import Detail from "./pages/Detail";
@@ -24,6 +24,7 @@ const client = new ApolloClient({
     });
   },
   uri: "/graphql",
+  cache: new InMemoryCache(),
 });
 
 function App() {
